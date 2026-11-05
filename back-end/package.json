@@ -1,0 +1,18 @@
+{
+  "name": "todo-app",
+  "version": "1.0.0",
+  "description": "ToDo Project",
+  "license": "ISC",
+  "author": "Ananthakumar p",
+  "type": "commonjs",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^5.3.0",
+    "mongoose": "^9.11.4",
+    "nodemon": "^3.1.14"
+  }
+}
