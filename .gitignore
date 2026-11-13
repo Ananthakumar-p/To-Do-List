@@ -1,0 +1,8 @@
+# environments variable
+.env*
+
+# packages
+node_modules
+
+# test folder
+# tests

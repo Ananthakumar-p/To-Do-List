@@ -11,7 +11,7 @@ function Todo() {
   const [editId, setEditId] = useState(-1);
   const [editTitle, setEditTitle] = useState("");
   const [editDescription, setEditDescription] = useState("");
-  const apiURL = "http://localhost:8000/";
+  const apiURL = process.env.REACT_APP_API_URL;
 
   const handelSubmit = () => {
     setError("");
@@ -26,19 +26,22 @@ function Todo() {
       }).then((res)=>{
         if(res.ok){
           // add item to list
-          setTodo([...todo, {title, description}])
-          setTitle("");
-          setDescription("");
-          setMsg("Item added successfilly")
-          setTimeout(()=>{
-            setMsg("");
-          },3000)
+          // setTodo([...todo, {title, description}])
+          return res.json().then((newTodo) => {
+            setTodo((currentTodo) => [...currentTodo, newTodo]);
+            setTitle("");
+            setDescription("");
+            setMsg("Item added successfilly")
+            setTimeout(()=>{
+              setMsg("");
+            },3000);
+          });
         }else{
           //set error
           setError("Unable to create Todo item")
         }
       }).catch((err)=>{
-        setError(err);
+        setError(err.message);
       })
       
     }

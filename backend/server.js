@@ -1,10 +1,13 @@
 // Express, mongoose
+require("dotenv").config();
+
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 
 // create an instance of express
 const app = express()
+const port = process.env.PORT;
 app.use(express.json())
 app.use(cors())
 
@@ -12,7 +15,7 @@ app.use(cors())
 
 // let DataBase = [];
 // connecting mongoose
-mongoose.connect("mongodb://localhost:27017/todo-app")
+mongoose.connect(process.env.MONGO_URI)
 .then(()=>{
     console.log("Db Connected!");
 })
@@ -103,7 +106,8 @@ app.delete("/todo/:id", async (req,res)=>{
 })
 
 //Start the Server
-const port = 8000;
-app.listen(port, ()=>{
+const server = app.listen(port, ()=>{
     console.log(`Server is running to port ${port}`);
 })
+
+module.exports = {app, server}
