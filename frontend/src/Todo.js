@@ -128,56 +128,111 @@ function Todo() {
   }
   
   return (
-    <>
-    <div className="row p-3 bg-success text-light">
-        <h1>Todo List Project With MERN Stack</h1>
-    </div>
-    <div className="row">
-        <h3>Add Item</h3>
-        {msg && <p className="text-success">{msg}</p>}
-        <div className="form-group d-flex gap-2">
-          <input placeholder="Title" onChange={(e)=>{setTitle(e.target.value)}} value={title} className="form-control" type="text"/>
-          <input placeholder="Description" onChange={(e)=>{setDescription(e.target.value)}} value={description} className="form-control" type="text"/>
-          <button className="btn btn-dark" onClick={handelSubmit}>Submit</button>
+    <main className="todo-page">
+      <header className="todo-header">
+        <div>
+          <p className="todo-header__eyebrow">Productivity dashboard</p>
+          <h1>Todo List Project</h1>
         </div>
-        {error && <p className="text-danger">{error}</p>}
-    </div>
-    <div className="row mt-3 container-fluid p-5" style={{ maxWidth: "1000px", margin: "0" }}>
-      <h3>Tasks</h3>
-      <div className="col-md-6">
-        <ul className="list-group">
-          {
-            todo.map((item)=> (
-              <li className="list-group-item bg-info d-flex justify-content-between align-items-center my-2">
-              <div className="d-flex flex-column me-2">
-                {
-                  editId === -1 || editId !== item._id ? <>
-                    <span className="fw-bold">{item.title}</span>
-                    <span >{item.description}</span>
-                  </> : <>
-                    <div className="form-group d-flex gap-2">
-                      <input placeholder="Title" onChange={(e)=>{setEditTitle(e.target.value)}} value={editTitle} className="form-control" type="text"/>
-                      <input placeholder="Description" onChange={(e)=>{setEditDescription(e.target.value)}} value={editDescription} className="form-control" type="text"/>
-                    </div>
+        <span className="todo-header__badge">{todo.length} tasks</span>
+      </header>
+
+      <section className="todo-card">
+        <div className="section-heading">
+          <h3>Add Item</h3>
+        </div>
+
+        {msg && <p className="todo-message todo-message--success">{msg}</p>}
+
+        <div className="todo-form">
+          <div className="todo-form__inputs">
+            <input
+              placeholder="Title"
+              onChange={(e) => setTitle(e.target.value)}
+              value={title}
+              className="todo-input"
+              type="text"
+            />
+            <input
+              placeholder="Description"
+              onChange={(e) => setDescription(e.target.value)}
+              value={description}
+              className="todo-input"
+              type="text"
+            />
+          </div>
+          <button className="todo-button todo-button--primary" onClick={handelSubmit}>
+            Add Task
+          </button>
+        </div>
+
+        {error && <p className="todo-message todo-message--error">{error}</p>}
+      </section>
+
+      <section className="todo-list-section">
+        <div className="section-heading">
+          <h3>Tasks</h3>
+        </div>
+
+        <ul className="todo-list">
+          {todo.map((item) => (
+            <li
+              key={item._id || item.title}
+              className={`todo-item ${editId === item._id ? 'todo-item--editing' : ''}`}
+            >
+              <div className="todo-content">
+                {editId === item._id ? (
+                  <div className="edit-form">
+                    <input
+                      placeholder="Title"
+                      onChange={(e) => setEditTitle(e.target.value)}
+                      value={editTitle}
+                      className="todo-input"
+                      type="text"
+                    />
+                    <input
+                      placeholder="Description"
+                      onChange={(e) => setEditDescription(e.target.value)}
+                      value={editDescription}
+                      className="todo-input"
+                      type="text"
+                    />
+                  </div>
+                ) : (
+                  <>
+                    <span className="todo-item__title">{item.title}</span>
+                    <span className="todo-item__description">{item.description}</span>
                   </>
-                }
-                
+                )}
               </div>
-              <div className="d-flex gap-2">
-                { editId === -1 || editId !== item._id ? <button className="btn btn-warning" onClick={()=>handleEdit(item)}>Edit</button> 
-                : <button className="btn btn-warning" onClick={handleUpdate}>Update</button> }
-                { editId === -1 || editId !== item._id ? <button className="btn btn-danger" onClick={()=>handleDelete(item._id)}>Delete</button> 
-                : <button className="btn btn-danger" onClick={handleEditCancel}>Cancel</button> }
+
+              <div className="todo-actions">
+                {editId === item._id ? (
+                  <>
+                    <button className="todo-button todo-button--secondary" onClick={handleUpdate}>
+                      Update
+                    </button>
+                    <button className="todo-button todo-button--ghost" onClick={handleEditCancel}>
+                      Cancel
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <button className="todo-button todo-button--secondary" onClick={() => handleEdit(item)}>
+                      Edit
+                    </button>
+                    <button className="todo-button todo-button--danger" onClick={() => handleDelete(item._id)}>
+                      Delete
+                    </button>
+                  </>
+                )}
               </div>
             </li>
-            ))
-          } 
+          ))}
         </ul>
-      </div>
-    </div>
-    </>
-    
-  )
+      </section>
+    </main>
+  );
 }
 
 export default Todo
