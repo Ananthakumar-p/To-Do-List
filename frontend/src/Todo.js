@@ -10,7 +10,7 @@ function Todo() {
   const [editId, setEditId] = useState(-1);
   const [editTitle, setEditTitle] = useState("");
   const [editDescription, setEditDescription] = useState("");
-  const apiURL = process.env.REACT_APP_API_URL;
+  const apiURL = process.env.BACKEND;
 
   const handelSubmit = () => {
     setError("");
