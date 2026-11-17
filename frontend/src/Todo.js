@@ -1,4 +1,3 @@
-import React from 'react'
 import { useState, useEffect } from 'react';
 
 
@@ -48,16 +47,22 @@ function Todo() {
   }
 
   useEffect(() => {
-      getItems()
-  },[]);
-
-  const getItems = () => {
-    fetch(apiURL+"todo")
-    .then((res)=> res.json())
-    .then((res)=> {
-      setTodo(res)
-    })
-  }
+    const getItems = () => {
+      fetch(apiURL+"todo")
+        .then(async (res)=> {
+          const data = await res.json();
+          if (!res.ok) {
+            throw new Error(data.message || "Request failed");
+          }
+          if (!Array.isArray(data)) {
+            throw new Error("The server returned an invalid todo list");
+          }
+          setTodo(data);
+        })
+        .catch(err=>setError(`Unable to load todo items: ${err.message}`))
+    };
+    getItems();
+  }, [apiURL]);
 
   const handleEdit = (item) => {
     setEditId(item._id); 
@@ -79,7 +84,7 @@ function Todo() {
         if(res.ok){
           // update item to list
           const updatedTodo = todo.map((item)=>{
-            if(item._id == editId){
+            if(item._id === editId){
               item.title = editTitle;
               item.description = editDescription;
             }
@@ -118,6 +123,7 @@ function Todo() {
         const updatedTodo = todo.filter((item)=> item._id !== id)
         setTodo(updatedTodo)
       })
+      .catch(err=>console.log(err.message))
     }
   }
   
@@ -145,7 +151,7 @@ function Todo() {
               <li className="list-group-item bg-info d-flex justify-content-between align-items-center my-2">
               <div className="d-flex flex-column me-2">
                 {
-                  editId == -1 || editId !== item._id ? <>
+                  editId === -1 || editId !== item._id ? <>
                     <span className="fw-bold">{item.title}</span>
                     <span >{item.description}</span>
                   </> : <>
@@ -158,9 +164,9 @@ function Todo() {
                 
               </div>
               <div className="d-flex gap-2">
-                { editId == -1 || editId !== item._id ? <button className="btn btn-warning" onClick={()=>handleEdit(item)}>Edit</button> 
+                { editId === -1 || editId !== item._id ? <button className="btn btn-warning" onClick={()=>handleEdit(item)}>Edit</button> 
                 : <button className="btn btn-warning" onClick={handleUpdate}>Update</button> }
-                { editId == -1 || editId !== item._id ? <button className="btn btn-danger" onClick={()=>handleDelete(item._id)}>Delete</button> 
+                { editId === -1 || editId !== item._id ? <button className="btn btn-danger" onClick={()=>handleDelete(item._id)}>Delete</button> 
                 : <button className="btn btn-danger" onClick={handleEditCancel}>Cancel</button> }
               </div>
             </li>

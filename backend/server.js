@@ -80,7 +80,7 @@ app.put("/todo/:id", async (req,res)=>{
         const updatedTodo = await todoModel.findByIdAndUpdate(
             id,
             {title, description},
-            {new: true}
+            {returnDocument: "after"}
         )
 
         if(!updatedTodo){
