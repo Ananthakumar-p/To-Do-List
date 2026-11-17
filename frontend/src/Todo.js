@@ -16,7 +16,7 @@ function Todo() {
     setError("");
     //input check
     if(title.trim() !== "" && description.trim() !== ""){
-      fetch(apiURL+"todo", {
+      fetch(apiURL, { // +"todo"
         method : "POST",
         headers: {
           "Content-Type" : "application/json"
@@ -48,7 +48,7 @@ function Todo() {
 
   useEffect(() => {
     const getItems = () => {
-      fetch(apiURL+"todo")
+      fetch(apiURL) // +"todo"
         .then(async (res)=> {
           const data = await res.json();
           if (!res.ok) {
@@ -74,7 +74,7 @@ function Todo() {
     setError("");
     //input check
     if(editTitle.trim() !== "" && editDescription.trim() !== ""){
-      fetch(apiURL+"todo/"+editId, {
+      fetch(apiURL+"/"+editId, { // +"todo/"+
         method : "PUT",
         headers: {
           "Content-Type" : "application/json"
@@ -116,7 +116,7 @@ function Todo() {
 
   const handleDelete = (id) => {
     if(window.confirm("Are you sure want to delete?")){
-      fetch(apiURL+"todo/"+id, {
+      fetch(apiURL+"/"+id, { // +"todo/"+
         method: "DELETE"
       })
       .then(()=>{
